@@ -1,4 +1,4 @@
-FROM tomcat:8.0-jre8-alpine
+FROM tomcat:9.0-jre8-alpine
 
 ADD start.sh /start.sh
 
