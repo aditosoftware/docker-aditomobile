@@ -1,17 +1,8 @@
 #!/bin/bash
 
-if [[ -z $HTTPPORT ]];  then
-    HTTPPORT=8080
-fi
-
-if [[ -z $HTTPSPORT ]];  then
-    HTTPSPORT=8443
-fi
-
 cat > /usr/local/tomcat/conf/server.xml << EOF
-<?xml version='1.0' encoding='utf-8'?>
-
-<Server port="8005" shutdown="SHUTDOWN">
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="-1" shutdown="SHUTDOWN">
   <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
@@ -27,14 +18,18 @@ cat > /usr/local/tomcat/conf/server.xml << EOF
   </GlobalNamingResources>
 
   <Service name="Catalina">
-    <Connector port="$HTTPPORT" protocol="HTTP/1.1"
-               connectionTimeout="20000"
-               redirectPort="$HTTPSPORT" />
 
-    <Connector port="$HTTPSPORT" protocol="org.apache.coyote.http11.Http11NioProtocol"
-               maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
-               clientAuth="false" sslProtocol="TLS" />
-    <Connector port="8009" protocol="AJP/1.3" redirectPort="$HTTPSPORT" />
+    <Connector port="${HTTPPORT:-8080}" protocol="HTTP/1.1"
+               connectionTimeout="20000" />
+
+    <Connector port="${HTTPSPORT:-8443}" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig>
+            <Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+
     <Engine name="Catalina" defaultHost="localhost">
       <Realm className="org.apache.catalina.realm.LockOutRealm">
         <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
@@ -53,7 +48,9 @@ cat > /usr/local/tomcat/conf/server.xml << EOF
 
 EOF
 
-$JAVA_HOME/bin/keytool -genkey -alias tomcat -dname "cn=ADITO, ou=ADITO, o=ADITO, c=DE" -keyalg RSA -storepass changeit -keypass changeit
+if [ ! -f /usr/local/tomcat/conf/localhost-rsa.jks ]; then
+    $JAVA_HOME/bin/keytool -genkey -alias tomcat -dname "cn=ADITO, ou=ADITO, o=ADITO, c=DE" -keyalg RSA -storepass changeit -keypass changeit -keystore /usr/local/tomcat/conf/localhost-rsa.jks -storetype pkcs12
+fi
 
 echo "apiurl = ${APIURL}" > /usr/local/tomcat/webapps/aditomobile/WEB-INF/classes/adito.prop
 echo "apiuser = ${APIUSER}" >> /usr/local/tomcat/webapps/aditomobile/WEB-INF/classes/adito.prop
