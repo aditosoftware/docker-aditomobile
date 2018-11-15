@@ -1,5 +1,8 @@
 # Description
-This is the docker image for [ADITO](https://www.adito.de) Mobile 
+This is the docker image for [ADITO](https://www.adito.de) Mobile
+
+# Requirements
+
 You need an ADITO Server with enabled SOAP webservices
 
 # Usage
@@ -8,7 +11,7 @@ You need an ADITO Server with enabled SOAP webservices
 
 ## Environment Variables
 
-All common environment variables with their default values are listed below.
+All common environment variables with their default values are listed below
 
 ### `HTTPPORT=8080`
 
