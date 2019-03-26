@@ -11,3 +11,4 @@ RUN chmod +x /start.sh \
  && rm -rf /tmp/*
 
 CMD ["/start.sh"]
+
