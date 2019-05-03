@@ -9,6 +9,7 @@ RUN chmod +x /start.sh \
  && curl -s -o /tmp/aditomobile.war "https://files.weptun.de/index.php?action=show&what=file&hash=2f8178d82b.war" \
  && unzip -q /tmp/aditomobile.war -d /usr/local/tomcat/webapps/aditomobile \
  && rm -rf /tmp/*
-
+ 
+ 
 CMD ["/start.sh"]
 
