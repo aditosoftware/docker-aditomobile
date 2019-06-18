@@ -6,7 +6,7 @@ RUN chmod +x /start.sh \
  && apk add --no-cache curl \
  && rm -rf /usr/local/tomcat/webapps/* \
  && mkdir -p /usr/local/tomcat/webapps/aditomobile \
- && curl -s -o /tmp/aditomobile.war "https://files.weptun.de/index.php?action=show&what=file&hash=153fa98a08.war" \
+ && curl -s -o /tmp/aditomobile.war "https://files.weptun.de/index.php?action=show&what=file&hash=20b5d10119.war" \
  && unzip -q /tmp/aditomobile.war -d /usr/local/tomcat/webapps/aditomobile \
  && rm -rf /tmp/*
 
